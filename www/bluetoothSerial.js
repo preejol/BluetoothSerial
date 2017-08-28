@@ -58,6 +58,10 @@ module.exports = {
 
         cordova.exec(success, failure, "BluetoothSerial", "write", [data]);
     },
+    
+    barcode: function (data, success, failure) {
+        cordova.exec(success, failure, "BluetoothSerial", "barcode", [data]);
+    },
 
     // calls the success callback when new data is available
     subscribe: function (delimiter, success, failure) {
