@@ -522,8 +522,7 @@ public class BluetoothSerialService {
 	                // Share the sent message back to the UI Activity
 	                mHandler.obtainMessage(BluetoothSerial.MESSAGE_WRITE, -1, -1, printData).sendToTarget();
 		        } else {
-		            return this.returnByteArrayIfInvalidData;
-               		Log.e(TAG, "Exception during barcode");
+               			Log.e(TAG, "Exception during barcode");
 		        }
 
             } catch (IOException e) {
