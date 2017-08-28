@@ -478,6 +478,7 @@ public class BluetoothSerialService {
          */
         public void write(byte[] buffer) {
             try {
+
                 mmOutStream.write(buffer);
 
                 // Share the sent message back to the UI Activity
@@ -485,6 +486,48 @@ public class BluetoothSerialService {
 
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
+            }
+        }
+
+        /**
+         * Write to the connected OutStream.
+         * @param printString  The bytes to write
+         */
+        public void barcode(String printString) {
+            try {
+            	if(printString.length() > 0 && printString.length() <= 13) {
+		            byte[] printData = new byte[8 + printString.length()];
+		            byte i = 0;
+		            int len = printString.length();
+		            int MSB = len & 240 | 48;
+		            int LSB = len & 15 | 48;
+		            int var9 = i + 1;
+		            printData[i] = 27;
+		            printData[var9++] = 56;
+		            printData[var9++] = 41;
+		            printData[var9++] = 66;
+		            printData[var9++] = (byte)MSB;
+		            printData[var9++] = (byte)LSB;
+		            printData[var9++] = 41;
+		            printData[var9++] = 69;
+		            byte[] data = printString.getBytes();
+		            Log.d("Barcode", "" + printString);
+
+		            for(int j = var9; j < printString.length() + var9; ++j) {
+		                printData[j] = data[j - var9];
+		            }
+
+	                mmOutStream.write(printData);
+
+	                // Share the sent message back to the UI Activity
+	                mHandler.obtainMessage(BluetoothSerial.MESSAGE_WRITE, -1, -1, printData).sendToTarget();
+		        } else {
+		            return this.returnByteArrayIfInvalidData;
+               		Log.e(TAG, "Exception during barcode");
+		        }
+
+            } catch (IOException e) {
+                Log.e(TAG, "Exception during barcode", e);
             }
         }
 

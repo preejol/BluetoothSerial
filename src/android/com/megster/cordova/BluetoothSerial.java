@@ -36,6 +36,7 @@ public class BluetoothSerial extends CordovaPlugin {
     private static final String CONNECT_INSECURE = "connectInsecure";
     private static final String DISCONNECT = "disconnect";
     private static final String WRITE = "write";
+    private static final String BARCODE = "barcode";
     private static final String AVAILABLE = "available";
     private static final String READ = "read";
     private static final String READ_UNTIL = "readUntil";
@@ -70,11 +71,12 @@ public class BluetoothSerial extends CordovaPlugin {
 
     // Message types sent from the BluetoothSerialService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_WRITE = 3;
-    public static final int MESSAGE_DEVICE_NAME = 4;
-    public static final int MESSAGE_TOAST = 5;
-    public static final int MESSAGE_READ_RAW = 6;
+    public static final int MESSAGE_READ         = 2;
+    public static final int MESSAGE_WRITE        = 3;
+    public static final int MESSAGE_BARCODE      = 3;
+    public static final int MESSAGE_DEVICE_NAME  = 4;
+    public static final int MESSAGE_TOAST        = 5;
+    public static final int MESSAGE_READ_RAW     = 6;
 
     // Key names received from the BluetoothChatService Handler
     public static final String DEVICE_NAME = "device_name";
@@ -129,6 +131,12 @@ public class BluetoothSerial extends CordovaPlugin {
 
             byte[] data = args.getArrayBuffer(0);
             bluetoothSerialService.write(data);
+            callbackContext.success();
+
+        } else if (action.equals(BARCODE)) {
+
+            String data = args.getString(0);
+            bluetoothSerialService.barcode(data);
             callbackContext.success();
 
         } else if (action.equals(AVAILABLE)) {
